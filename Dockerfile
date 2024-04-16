@@ -1,13 +1,3 @@
-# FROM nvcr.io/nvidia/cuda:11.3.1-cudnn8-devel-ubuntu20.04
-# ENV LANG=C.UTF-8
-# ENV TZ=Europe/Madrid
-# RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-# RUN apt-get -y update && apt-get install -y build-essential wget libgl1-mesa-glx libsm6 libxext6 libglib2.0-0 git python3-pip
-
-# RUN git clone https://github.com/angtordom1/OrientedRepPoints.git orpdetection
-# WORKDIR /orpdetection
-
-# RUN python3 -m pip  install torch==1.10.0+cu111 torchvision==0.11.0+cu111 torchaudio==0.10.0 -f https://download.pytorch.org/whl/torch_stable.html
 ARG PYTORCH="1.10.0"
 ARG CUDA="11.3"
 ARG CUDNN="8"
@@ -34,9 +24,9 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-#RUN git clone https://github.com/angtordom1/OrientedRepPoints.git orpdetection
-COPY . /orpdetection
-# ADD ./data /orpdetection/data
+RUN git clone https://github.com/angtordom1/OrientedRepPoints.git orpdetection
+ADD ./data /orpdetection/data
+ADD ./work_dirs /orpdetection/work_dirs
 WORKDIR /orpdetection
 
 # Install mmdetection
