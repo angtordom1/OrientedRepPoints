@@ -228,6 +228,7 @@ class RotateRandomFlip(object):
             rbboxes(ndarray): shape (..., 8*k)
             img_shape(tuple): (height, width)
         """
+        
         assert rbboxes.shape[-1] % 8 == 0
         flipped = rbboxes.copy()
         if direction == 'horizontal':
@@ -260,9 +261,10 @@ class RotateRandomFlip(object):
                 results['img'], direction=results['flip_direction'])
             # flip bboxes
             for key in results.get('bbox_fields', []):
-                results[key] = self.rbbox_flip(results[key],
-                                              results['img_shape'],
-                                              results['flip_direction'])
+                if key != 'gt_bboxes_ignore':
+                    results[key] = self.rbbox_flip(results[key],
+                                                results['img_shape'],
+                                                results['flip_direction'])
         return results
 
     def __repr__(self):
@@ -638,11 +640,11 @@ class RandomCrop(object):
 
         # crop bboxes accordingly and clip to the image boundary
         for key in results.get('bbox_fields', []):
-            bbox_offset = np.array([offset_w, offset_h, offset_w, offset_h],
-                                   dtype=np.float32)
-            bboxes = results[key] - bbox_offset
-            bboxes[:, 0::2] = np.clip(bboxes[:, 0::2], 0, img_shape[1] - 1)
-            bboxes[:, 1::2] = np.clip(bboxes[:, 1::2], 0, img_shape[0] - 1)
+            bboxes = results[key]
+            bboxes[:, 0::2] -= crop_x1
+            bboxes[:, 1::2] -= crop_y1
+            bboxes[:, 0::2] = np.clip(bboxes[:, 0::2], 0, self.crop_size[1] - 1)
+            bboxes[:, 1::2] = np.clip(bboxes[:, 1::2], 0, self.crop_size[0] - 1)
             results[key] = bboxes
 
         # crop semantic seg
@@ -673,7 +675,7 @@ class RandomCrop(object):
                     results['gt_masks'] = np.stack(valid_gt_masks)
                 else:
                     results['gt_masks'] = np.empty(
-                        (0, ) + results['img_shape'], dtype=np.uint8)
+                        (0, ) + results['img_shape'][:2], dtype=np.uint8)
 
         return results
 
@@ -739,10 +741,11 @@ class PhotoMetricDistortion(object):
 
     def __call__(self, results):
         img = results['img']
+        img = img.astype(np.float64)
+        
         # random brightness
         if random.randint(2):
-            delta = random.uniform(-self.brightness_delta,
-                                   self.brightness_delta)
+            delta = random.uniform(-self.brightness_delta, self.brightness_delta)
             img += delta
 
         # mode == 0 --> do random contrast first
@@ -750,23 +753,26 @@ class PhotoMetricDistortion(object):
         mode = random.randint(2)
         if mode == 1:
             if random.randint(2):
-                alpha = random.uniform(self.contrast_lower,
-                                       self.contrast_upper)
+                alpha = random.uniform(self.contrast_lower, self.contrast_upper)
                 img *= alpha
 
+        img = np.clip(img, 0, 255).astype(np.uint8)  # Asegurarse de que los valores estén en el rango [0, 255] y convertir a uint8
+        
         # convert color from BGR to HSV
         img = mmcv.bgr2hsv(img)
 
         # random saturation
         if random.randint(2):
-            img[..., 1] *= random.uniform(self.saturation_lower,
-                                          self.saturation_upper)
+            img[..., 1] = img[..., 1].astype(np.float64) * random.uniform(self.saturation_lower, self.saturation_upper)
+            img[..., 1] = np.clip(img[..., 1], 0, 1)
 
         # random hue
         if random.randint(2):
             img[..., 0] += random.uniform(-self.hue_delta, self.hue_delta)
+            img[..., 0] = np.clip(img[..., 0], 0, 255).astype(np.uint8)
             img[..., 0][img[..., 0] > 360] -= 360
             img[..., 0][img[..., 0] < 0] += 360
+
 
         # convert color from HSV to BGR
         img = mmcv.hsv2bgr(img)
@@ -774,8 +780,7 @@ class PhotoMetricDistortion(object):
         # random contrast
         if mode == 0:
             if random.randint(2):
-                alpha = random.uniform(self.contrast_lower,
-                                       self.contrast_upper)
+                alpha = random.uniform(self.contrast_lower, self.contrast_upper)
                 img *= alpha
 
         # randomly swap channels

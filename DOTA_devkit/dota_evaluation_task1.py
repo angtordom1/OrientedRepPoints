@@ -248,7 +248,7 @@ def voc_eval(detpath,
     return rec, prec, ap
 
 def main():
-    # detpath = r'/mnt/SSD/lwt_workdir/data/dota_angle/result_merge_roitran/{:s}.txt'
+    # detpath = r'workdir/data/dota_angle/result_merge_roitran/{:s}.txt'
     detpath = r'/mnt/SSD/lwt_workdir/data/dota_angle/result_merge_ours/Task1_{:s}.txt'
     annopath = r'/mnt/SSD/lwt_workdir/data/dota_new/val/labelTxt/{:s}.txt'  # change the directory to the path of val/labelTxt, if you want to do evaluation on the valset
     imagesetfile = r'/mnt/SSD/lwt_workdir/data/dota_new/val/test.txt'

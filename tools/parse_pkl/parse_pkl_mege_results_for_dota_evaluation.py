@@ -207,8 +207,3 @@ mergebypoly(dst_raw_path, dst_merge_path)
 
 
 print('done!')
-
-
-
-                       
-                       

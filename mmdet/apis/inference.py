@@ -1,4 +1,5 @@
 import warnings
+import time
 
 import matplotlib.pyplot as plt
 import mmcv
@@ -83,8 +84,12 @@ def inference_detector(model, img):
     data = scatter(collate([data], samples_per_gpu=1), [device])[0]
     # forward the model
     with torch.no_grad():
+        start_time = time.time()
         result = model(return_loss=False, rescale=True, **data)
-    return result
+        stop_time = time.time()
+        pure_inf_time = stop_time - start_time
+        fps =  1/ pure_inf_time
+    return result, pure_inf_time, fps
 
 
 async def async_inference_detector(model, img):

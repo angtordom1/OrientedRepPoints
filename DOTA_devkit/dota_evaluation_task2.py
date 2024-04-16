@@ -233,9 +233,9 @@ def main():
     # annopath = r'I:\dota\testset\ReclabelTxt-utf-8\{:s}.txt'
     # imagesetfile = r'I:\dota\testset\va.txt'
  
-    detpath = r'work_dirs/temp/result_merge/Task2_{:s}.txt'
-    annopath = r'data/dota/test/hbb_label_txt/{:s}.txt'# change the directory to the path of val/labelTxt, if you want to do evaluation on the valset
-    imagesetfile = r'data/dota/test/testset.txt'
+    detpath = r'/mnt/SSD/lwt_workdir/temp/result_merge/Task2_{:s}.txt'
+    annopath = r'/mnt/SSD/lwt_workdir/data/dota/test/hbb_label_txt/{:s}.txt'# change the directory to the path of val/labelTxt, if you want to do evaluation on the valset
+    imagesetfile = r'/mnt/SSD/lwt_workdir/data/dota/test/testset.txt'
 
     classnames = ['plane', 'baseball-diamond', 'bridge', 'ground-track-field', 'small-vehicle', 'large-vehicle', 'ship', 'tennis-court',
                 'basketball-court', 'storage-tank',  'soccer-ball-field', 'roundabout', 'harbor', 'swimming-pool', 'helicopter']
