@@ -1,8 +1,10 @@
-# Oriented Object Detection in High Resolution Satellite Imagery
-Object detection from aerial images is a complex task due to the difficulty in detecting small objects, the variability in their appearance, and their high density within a limited image space. To address these challenges, advanced techniques are required. Furthermore, objects in aerial images may appear with arbitrary rotations. Traditional detectors, which attempt to address the aforementioned issues, are unable to solve this orientation problem, resulting in suboptimal localization of such objects. Several proposals have been made to adapt bounding boxes to rotated objects, including the use of adaptive point sets tailored to each object's characteristics. This paper studies and evaluates the performance and characteristics of [Oriented RepPoints](https://github.com/LiWentomng/OrientedRepPoints), a model that uses adaptive point sets for object-oriented detection through satellite imagery. A modification of the model is proposed to improve its performance in detecting the features of different objects. Finally, a comparison is made between the base model, the modification, and other state-of-the-art models on the DOTA dataset.
+# Oriented Object Detection in High Resolution Satellite Imagery 
+Object detection from aerial images is a complex task due to the difficulty in detecting small objects, the variability in their appearance, and their high density within a limited image space. To address these challenges, advanced techniques are required. Furthermore, objects in aerial images may appear with arbitrary rotations. Traditional detectors, which attempt to address the aforementioned issues, are unable to solve this orientation problem, resulting in suboptimal localization of such objects. Several proposals have been made to adapt bounding boxes to rotated objects, including the use of adaptive point sets tailored to each object's characteristics. [Oriented RepPoints](https://github.com/LiWentomng/OrientedRepPoints), is a model that uses adaptive point sets for object-oriented detection through satellite imagery. This repository is a modified version where the feature extractor is replaced by a PAFPN to improve its performance in detecting the features of different objects. Finally, a comparison is made between the base model, the modification, and other state-of-the-art models on the DOTA dataset.
+
+The paper can be seen [here](https://oa.upm.es/75859/).
 
 # Modified architecture
-<img src="docs/overallnetwork_pafpn.png" width="800px">
+<img src="docs\overallnetwork_pafpn.png" width="800px">
 
 
 # Installation
