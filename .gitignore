@@ -1,5 +1,12 @@
 /work_dirs/*
-/__pycache__/*
-**.pyc
+**/__pycache__/
+**/*.pyc
+**/*.so
+build/
+data/
+logs/
+txt_out/
+mmdet.egg-info/
 build.sh
 run.sh
+**/*.slurm
