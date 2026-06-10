@@ -11,6 +11,7 @@
     Note, the evaluation is on the large scale images
 """
 import xml.etree.ElementTree as ET
+import argparse
 import os
 #import cPickle
 import numpy as np
@@ -248,10 +249,26 @@ def voc_eval(detpath,
     return rec, prec, ap
 
 def main():
+    
+    def parse_args():
+        parser = argparse.ArgumentParser(
+            description='MMDet test (and eval) a model')
+        parser.add_argument('detpath', help='txt files path')
+        parser.add_argument('annopath', help='directory of gt txt files')
+        parser.add_argument('imagesetfile', help='txt file including the image names')
+        args = parser.parse_args()
+        return args
+    
+    args = parse_args()
+
     # detpath = r'workdir/data/dota_angle/result_merge_roitran/{:s}.txt'
-    detpath = r'/mnt/SSD/lwt_workdir/data/dota_angle/result_merge_ours/Task1_{:s}.txt'
-    annopath = r'/mnt/SSD/lwt_workdir/data/dota_new/val/labelTxt/{:s}.txt'  # change the directory to the path of val/labelTxt, if you want to do evaluation on the valset
-    imagesetfile = r'/mnt/SSD/lwt_workdir/data/dota_new/val/test.txt'
+    # detpath = r'/mnt/SSD/lwt_workdir/data/dota_angle/result_merge_ours/Task1_{:s}.txt'
+    # annopath = r'/mnt/SSD/lwt_workdir/data/dota_new/val/labelTxt/{:s}.txt'  # change the directory to the path of val/labelTxt, if you want to do evaluation on the valset
+    # imagesetfile = r'/mnt/SSD/lwt_workdir/data/dota_new/val/test.txt'
+    
+    detpath = os.path.join(args.detpath, 'Task1_{:s}.txt')
+    annopath = os.path.join(args.annopath, '{:s}.txt')
+    imagesetfile = args.imagesetfile
     
     # For DOTA-v1.5
     # classnames = ['plane', 'baseball-diamond', 'bridge', 'ground-track-field', 'small-vehicle', 'large-vehicle', 'ship', 'tennis-court',
@@ -292,5 +309,6 @@ def main():
     print('map:', map)
     classaps = 100*np.array(classaps)
     print('classaps: ', classaps)
+    
 if __name__ == '__main__':
     main()
