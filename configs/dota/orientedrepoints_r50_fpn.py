@@ -90,7 +90,7 @@ test_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(
         type='MultiScaleFlipAug',
-        img_scale=(1024, 1024),
+        img_scale=(1333, 1024),
         flip=False,
         transforms=[
             dict(type='RotateResize', keep_ratio=True),
@@ -102,24 +102,24 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    imgs_per_gpu=1,
-    workers_per_gpu=1,
+    imgs_per_gpu=4,
+    workers_per_gpu=4,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + 'trainval_split/trainval_coco_8point.json',
-        img_prefix=data_root + 'trainval_split/images/',
+        ann_file=data_root + 'train_split/train.json',
+        img_prefix=data_root + 'train_split/images/',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file=data_root + 'test_split/test_coco_8point.json',
-        img_prefix=data_root + 'test_split/images/',
+        ann_file=data_root + 'val_split/val.json',
+        img_prefix=data_root + 'val_split/images/',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + 'test_split/test_coco_8point.json',
-        img_prefix=data_root + 'test_split/images/',
+        ann_file=data_root + 'val_split/val.json',
+        img_prefix=data_root + 'val_split/images/',
         pipeline=test_pipeline))
-evaluation = dict(interval=2, metric='mAP')
+evaluation = dict(interval=1, metric='bbox', save_best='auto')
 # optimizer
 optimizer = dict(type='SGD', lr=0.008, momentum=0.9, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
@@ -130,7 +130,7 @@ lr_config = dict(
     warmup_iters=500,
     warmup_ratio=1.0 / 3,
     step=[24, 32, 38])
-checkpoint_config = dict(interval=1)
+checkpoint_config = dict(interval=1, max_keep_ckpts=1)
 # yapf:disable
 log_config = dict(
     interval=50,
@@ -140,10 +140,10 @@ log_config = dict(
     ])
 # yapf:enable
 # runtime settings
-total_epochs = 5
+total_epochs = 40
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = 'work_dirs/dota/orientedreppoints_r50_demo/'
+work_dir = 'work_dirs/dota/fpn50/'
 load_from = None
 resume_from = None
 workflow = [('train', 1), ('val', 1)]

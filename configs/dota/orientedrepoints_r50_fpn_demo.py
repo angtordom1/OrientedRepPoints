@@ -15,11 +15,11 @@ model = dict(
     ),
     neck=
         dict(
-        type='PAFPN',
+        type='FPN',
         in_channels=[256, 512, 1024, 2048],
         out_channels=256,
         start_level=1,
-        add_extra_convs='on_input',
+        add_extra_convs=True,
         num_outs=5,
         norm_cfg=norm_cfg
         ),
@@ -102,24 +102,24 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    imgs_per_gpu=4,
-    workers_per_gpu=4,
+    imgs_per_gpu=2,
+    workers_per_gpu=2,
     train=dict(
         type=dataset_type,
-        ann_file=data_root + 'train_split/train.json',
-        img_prefix=data_root + 'train_split/images/',
+        ann_file=data_root + 'trainval_split/trainval_dota.json',
+        img_prefix=data_root + 'trainval_split/images/',
         pipeline=train_pipeline),
     val=dict(
         type=dataset_type,
-        ann_file=data_root + 'val_split/val.json',
-        img_prefix=data_root + 'val_split/images/',
+        ann_file=data_root + 'test_split/test_dota.json',
+        img_prefix=data_root + 'test_split/images/',
         pipeline=test_pipeline),
     test=dict(
         type=dataset_type,
-        ann_file=data_root + 'val_split/val.json',
-        img_prefix=data_root + 'val_split/images/',
+        ann_file=data_root + 'test_split/test_dota.json',
+        img_prefix=data_root + 'test_split/images/',
         pipeline=test_pipeline))
-evaluation = dict(interval=1, metric='bbox', save_best='auto')
+evaluation = dict(interval=1, metric='bbox')
 # optimizer
 optimizer = dict(type='SGD', lr=0.008, momentum=0.9, weight_decay=0.0001)
 optimizer_config = dict(grad_clip=dict(max_norm=35, norm_type=2))
@@ -130,20 +130,19 @@ lr_config = dict(
     warmup_iters=500,
     warmup_ratio=1.0 / 3,
     step=[24, 32, 38])
-checkpoint_config = dict(interval=1, max_keep_ckpts=1)
+checkpoint_config = dict(interval=1)
 # yapf:disable
 log_config = dict(
     interval=50,
     hooks=[
         dict(type='TextLoggerHook'),
-        dict(type='TensorboardLoggerHook')
     ])
 # yapf:enable
 # runtime settings
 total_epochs = 40
 dist_params = dict(backend='nccl')
 log_level = 'INFO'
-work_dir = 'work_dirs/dota/pafpn/'
+work_dir = 'work_dirs/orientedreppoints_r50_demo/'
 load_from = None
 resume_from = None
-workflow = [('train', 1), ('val', 1)]
+workflow = [('train', 1)]
