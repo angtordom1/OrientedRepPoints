@@ -2,17 +2,34 @@
 """
 @author: liwentong
 """
-
+import argparse
 import pickle
 import cv2
 import json
 import os 
 import shutil
 
-detection_pkl_path = './orientedreppoints_r50_demo.pkl'
-val_json = './test_dota.json'
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description='MMDet test (and eval) a model')
+    parser.add_argument('pkl_path', help='pkl file path')
+    parser.add_argument('val_json', help='json file path')
+    parser.add_argument('--out', help='output result file in txt format')
+    args = parser.parse_args()
+    return args
+
+
+# detection_pkl_path = './orientedreppoints_r50_demo.pkl'
+# val_json = './test_dota.json'
  
-result_raw_outpath = './txt_out/result_raw/'
+# result_raw_outpath = './txt_out/result_raw/'
+
+args = parse_args()
+
+detection_pkl_path = args.pkl_path
+val_json = args.val_json
+result_raw_outpath = args.out
 
 if os.path.exists(result_raw_outpath):
     shutil.rmtree(result_raw_outpath)  # delete output folder

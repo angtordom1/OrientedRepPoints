@@ -5,6 +5,7 @@ Created on Wed Sep 16 11:37:29 2020
 @author: admin
 """
 
+import argparse
 import pickle
 import cv2
 import json
@@ -18,15 +19,35 @@ import os.path as osp
 from DOTA_devkit.ResultMerge_multi_process import mergebypoly, mergebyrec
 
 
-detection_pkl_path = '/path/orientedreppoints_r50_demo_results.pkl'
-val_json = '/path/data/dota_1024/test.json'
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description='MMDet test (and eval) a model')
+    parser.add_argument('pkl_path', help='pkl file path')
+    parser.add_argument('val_json', help='json file path')
+    parser.add_argument('--out', help='output result file in txt format')
+    args = parser.parse_args()
+    return args
 
-result_raw_outpath = './txt_out/result_raw/'
+
+# detection_pkl_path = '/path/orientedreppoints_r50_demo_results.pkl'
+# val_json = '/path/data/dota_1024/test.json'
+
+# result_raw_outpath = '.f/{result_raw_outpath}/result_raw/'
+
+
+args = parse_args()
+
+detection_pkl_path = args.pkl_path
+val_json = args.val_json
+result_raw_outpath = args.out
+
 
 
 if os.path.exists(result_raw_outpath):
     shutil.rmtree(result_raw_outpath)  # delete output folder
 os.makedirs(result_raw_outpath)
+os.makedirs(f"{result_raw_outpath}/result_raw")
+os.makedirs(f"{result_raw_outpath}/result_merge")
 
 #open result pkl
 with open(detection_pkl_path, 'rb') as file:
@@ -94,99 +115,99 @@ for iter_img in range(num_img):
                             confidence = float(bbox[-1])
                             # fn_write_txt(outpath+txt_file,class_name, confidence, xmin, ymin ,xmax, ymax)  
                             if class_name =='harbor':
-                                with open('txt_out/result_raw/Task1_harbor.txt', 'a+') as f:
+                                with open(f'{result_raw_outpath}/result_raw/Task1_harbor.txt', 'a+') as f:
                                     f.write(img_base_name+ ' ' + str(confidence) + ' ' + str(bbox[-9])+ ' ' + str(bbox[-8]) + ' ' + str(
                                         bbox[-7])+ ' ' + str(bbox[-6]) + ' ' + str(bbox[-5])+ ' ' + str(bbox[-4]) + ' ' + str(bbox[-3])+ ' ' + str(
                                         bbox[-2]) + '\n')
                                     
                             if class_name =='roundabout':
-                                with open('txt_out/result_raw/Task1_roundabout.txt', 'a+') as f:
+                                with open(f'{result_raw_outpath}/result_raw/Task1_roundabout.txt', 'a+') as f:
                                     f.write(img_base_name+ ' ' + str(confidence) + ' ' + str(bbox[-9])+ ' ' + str(bbox[-8]) + ' ' + str(
                                         bbox[-7])+ ' ' + str(bbox[-6]) + ' ' + str(bbox[-5])+ ' ' + str(bbox[-4]) + ' ' + str(bbox[-3])+ ' ' + str(
                                         bbox[-2]) + '\n')         
             
                             if class_name =='small-vehicle':
-                                with open('txt_out/result_raw/Task1_small-vehicle.txt', 'a+') as f:
+                                with open(f'{result_raw_outpath}/result_raw/Task1_small-vehicle.txt', 'a+') as f:
                                     f.write(img_base_name+ ' ' + str(confidence) + ' ' + str(bbox[-9])+ ' ' + str(bbox[-8]) + ' ' + str(
                                         bbox[-7])+ ' ' + str(bbox[-6]) + ' ' +  str(bbox[-5])+ ' ' + str(bbox[-4]) + ' ' + str(bbox[-3])+ ' ' + str(
                                         bbox[-2]) + '\n')  
             
             
                             if class_name =='tennis-court':
-                                with open('txt_out/result_raw/Task1_tennis-court.txt', 'a+') as f:
+                                with open(f'{result_raw_outpath}/result_raw/Task1_tennis-court.txt', 'a+') as f:
                                     f.write(img_base_name+ ' ' + str(confidence) + ' ' + str(bbox[-9])+ ' ' + str(bbox[-8]) + ' ' + str(
                                         bbox[-7])+ ' ' + str(bbox[-6]) + ' ' +  str(bbox[-5])+ ' ' + str(bbox[-4]) + ' ' + str(bbox[-3])+ ' ' + str(
                                         bbox[-2]) + '\n')                       
             
             
                             if class_name =='baseball-diamond':
-                                with open('txt_out/result_raw/Task1_baseball-diamond.txt', 'a+') as f:
+                                with open(f'{result_raw_outpath}/result_raw/Task1_baseball-diamond.txt', 'a+') as f:
                                     f.write(img_base_name+ ' ' + str(confidence) + ' ' + str(bbox[-9])+ ' ' + str(bbox[-8]) + ' ' + str(
                                         bbox[-7])+ ' ' + str(bbox[-6]) + ' ' +  str(bbox[-5])+ ' ' + str(bbox[-4]) + ' ' + str(bbox[-3])+ ' ' + str(
                                         bbox[-2]) + '\n')   
             
                             if class_name =='ship':
-                                with open('txt_out/result_raw/Task1_ship.txt', 'a+') as f:
+                                with open(f'{result_raw_outpath}/result_raw/Task1_ship.txt', 'a+') as f:
                                     f.write(img_base_name+ ' ' + str(confidence) + ' ' + str(bbox[-9])+ ' ' + str(bbox[-8]) + ' ' + str(
                                         bbox[-7])+ ' ' + str(bbox[-6]) + ' ' +  str(bbox[-5])+ ' ' + str(bbox[-4]) + ' ' + str(bbox[-3])+ ' ' + str(
                                         bbox[-2]) + '\n')  
             
                             if class_name =='large-vehicle':
-                                with open('txt_out/result_raw/Task1_large-vehicle.txt', 'a+') as f:
+                                with open(f'{result_raw_outpath}/result_raw/Task1_large-vehicle.txt', 'a+') as f:
                                     f.write(img_base_name+ ' ' + str(confidence) + ' ' + str(bbox[-9])+ ' ' + str(bbox[-8]) + ' ' + str(
                                         bbox[-7])+ ' ' + str(bbox[-6]) + ' ' +  str(bbox[-5])+ ' ' + str(bbox[-4]) + ' ' + str(bbox[-3])+ ' ' + str(
                                         bbox[-2]) + '\n')  
             
                             if class_name =='storage-tank':
-                                with open('txt_out/result_raw/Task1_storage-tank.txt', 'a+') as f:
+                                with open(f'{result_raw_outpath}/result_raw/Task1_storage-tank.txt', 'a+') as f:
                                     f.write(img_base_name+ ' ' + str(confidence) + ' ' + str(bbox[-9])+ ' ' + str(bbox[-8]) + ' ' + str(
                                         bbox[-7])+ ' ' + str(bbox[-6]) + ' ' +  str(bbox[-5])+ ' ' + str(bbox[-4]) + ' ' + str(bbox[-3])+ ' ' + str(
                                         bbox[-2]) + '\n')  
             
             
                             if class_name =='plane':
-                                with open('txt_out/result_raw/Task1_plane.txt', 'a+') as f:
+                                with open(f'{result_raw_outpath}/result_raw/Task1_plane.txt', 'a+') as f:
                                     f.write(img_base_name+ ' ' + str(confidence) + ' ' + str(bbox[-9])+ ' ' + str(bbox[-8]) + ' ' + str(
                                         bbox[-7])+ ' ' + str(bbox[-6]) + ' ' +  str(bbox[-5])+ ' ' + str(bbox[-4]) + ' ' + str(bbox[-3])+ ' ' + str(
                                         bbox[-2]) + '\n')  
             
             
                             if class_name =='swimming-pool':
-                                with open('txt_out/result_raw/Task1_swimming-pool.txt', 'a+') as f:
+                                with open(f'{result_raw_outpath}/result_raw/Task1_swimming-pool.txt', 'a+') as f:
                                     f.write(img_base_name+ ' ' + str(confidence) + ' ' + str(bbox[-9])+ ' ' + str(bbox[-8]) + ' ' + str(
                                         bbox[-7])+ ' ' + str(bbox[-6]) + ' ' +  str(bbox[-5])+ ' ' + str(bbox[-4]) + ' ' + str(bbox[-3])+ ' ' + str(
                                         bbox[-2]) + '\n')  
             
             
                             if class_name =='bridge':
-                                with open('txt_out/result_raw/Task1_bridge.txt', 'a+') as f:
+                                with open(f'{result_raw_outpath}/result_raw/Task1_bridge.txt', 'a+') as f:
                                     f.write(img_base_name+ ' ' + str(confidence) + ' ' + str(bbox[-9])+ ' ' + str(bbox[-8]) + ' ' + str(
                                         bbox[-7])+ ' ' + str(bbox[-6]) + ' ' +  str(bbox[-5])+ ' ' + str(bbox[-4]) + ' ' + str(bbox[-3])+ ' ' + str(
                                         bbox[-2]) + '\n')  
                                    
                
                             if class_name =='helicopter':
-                                with open('txt_out/result_raw/Task1_helicopter.txt', 'a+') as f:
+                                with open(f'{result_raw_outpath}/result_raw/Task1_helicopter.txt', 'a+') as f:
                                     f.write(img_base_name+ ' ' + str(confidence) + ' ' + str(bbox[-9])+ ' ' + str(bbox[-8]) + ' ' + str(
                                         bbox[-7])+ ' ' + str(bbox[-6]) + ' ' +  str(bbox[-5])+ ' ' + str(bbox[-4]) + ' ' + str(bbox[-3])+ ' ' + str(
                                         bbox[-2]) + '\n')  
                                  
             
                             if class_name =='ground-track-field':
-                                with open('txt_out/result_raw/Task1_ground-track-field.txt', 'a+') as f:
+                                with open(f'{result_raw_outpath}/result_raw/Task1_ground-track-field.txt', 'a+') as f:
                                     f.write(img_base_name+ ' ' + str(confidence) + ' ' + str(bbox[-9])+ ' ' + str(bbox[-8]) + ' ' + str(
                                         bbox[-7])+ ' ' + str(bbox[-6]) + ' ' +  str(bbox[-5])+ ' ' + str(bbox[-4]) + ' ' + str(bbox[-3])+ ' ' + str(
                                         bbox[-2]) + '\n')                
             
                             if class_name =='soccer-ball-field':
-                                with open('txt_out/result_raw/Task1_soccer-ball-field.txt', 'a+') as f:
+                                with open(f'{result_raw_outpath}/result_raw/Task1_soccer-ball-field.txt', 'a+') as f:
                                     f.write(img_base_name+ ' ' + str(confidence) + ' ' + str(bbox[-9])+ ' ' + str(bbox[-8]) + ' ' + str(
                                         bbox[-7])+ ' ' + str(bbox[-6]) + ' ' +  str(bbox[-5])+ ' ' + str(bbox[-4]) + ' ' + str(bbox[-3])+ ' ' + str(
                                         bbox[-2]) + '\n')  
                                    
                                    
                             if class_name =='basketball-court':
-                                with open('txt_out/result_raw/Task1_basketball-court.txt', 'a+') as f:
+                                with open(f'{result_raw_outpath}/result_raw/Task1_basketball-court.txt', 'a+') as f:
                                     f.write(img_base_name+ ' ' + str(confidence) + ' ' + str(bbox[-9])+ ' ' + str(bbox[-8]) + ' ' + str(
                                         bbox[-7])+ ' ' + str(bbox[-6]) + ' ' +  str(bbox[-5])+ ' ' + str(bbox[-4]) + ' ' + str(bbox[-3])+ ' ' + str(
                                         bbox[-2]) + '\n')                         
@@ -195,10 +216,8 @@ for iter_img in range(num_img):
 
 print('merging the split results...')
 
-
-dst_path = '/path/parse_pkl/txt_out/'
-dst_raw_path = osp.join(dst_path, 'result_raw')
-dst_merge_path = osp.join(dst_path, 'result_merge')
+dst_raw_path = osp.join(result_raw_outpath, 'result_raw')
+dst_merge_path = osp.join(result_raw_outpath, 'result_merge')
 
 if not osp.exists(dst_merge_path):
     os.mkdir(dst_merge_path)
