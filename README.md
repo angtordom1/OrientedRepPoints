@@ -95,10 +95,10 @@ orientedreppoints
 # Results and Models
 The results on DOTA test set are shown in the table below. More detailed results please see the paper.
 
-  Model | Backbone | Neck  | Params (M)| mAP (%)| Inference Time (ms) 
+  Model | Backbone | Neck  | Params (M)| mAP (%)
  ----  | ----- | ------ |------| ------ | ------  
- OrientedReppoints | R-50 | FPN | 36.1 | 73.03 | 173
- OrientedReppoints | R-50 | PAFPN | 38.97 | - | -
+ OrientedReppoints | R-50 | FPN | 36.1 | 72.21
+ OrientedReppoints | R-50 | PAFPN | 38.97 | 72.27
 
 Note: 
 * The results are performed on the original DOTA images with 1024x1024 patches. 
@@ -107,7 +107,7 @@ The mAOE results on DOTA val set are shown in the table below.
 
  Model | Backbone | Neck | mAOE 
  ----  | ----- | ------  | -----
- OrientedReppoints | R-50 | FPN | 5.72° 
- OrientedReppoints | R-50 | PAFPN | -
+ OrientedReppoints | R-50 | FPN | 6.68° 
+ OrientedReppoints | R-50 | PAFPN | 7.42°
 
  Note：Orientation error evaluation (mAOE) is calculated on the val subset(only train subset for training).
