@@ -19,7 +19,7 @@ Object detection from aerial images is a complex task due to the difficulty in d
 
 
 # Installation
-## Requirements
+## Requirements (from [Oriented RepPoints](https://github.com/LiWentomng/OrientedRepPoints))
 * Linux
 * Python 3.7+ 
 * PyTorch==1.4.0 or higher
@@ -36,50 +36,58 @@ We have tested the following versions of OS and softwares：
 * GCC(G++): 4.9/5.3/5.4/7.3
 
 ## Install 
-From [Oriented RepPoints](https://github.com/LiWentomng/OrientedRepPoints):
-a. Create a conda virtual environment and activate it.  
-```
-conda create -n orientedreppoints python=3.7 -y 
-source activate orientedreppoints
-```
-b. Install PyTorch and torchvision following the [official instructions](https://pytorch.org/get-started/previous-versions/), e.g.,
-```
-conda install pytorch=1.4.0 torchvision cudatoolkit=10.0 -c pytorch
-```
-c. Clone the orientedreppoints repository.
-```
-git clone https://github.com/LiWentomng/OrientedRepPoints.git
+
+Clone this repository first:
+
+```bash
+git clone https://github.com/angtordom1/OrientedRepPoints.git
 cd OrientedRepPoints
 ```
-d. Install orientedreppoints.
 
-```python 
-pip install -r requirements.txt
-python setup.py develop  #or "pip install -v -e ."
-```
+Then choose one of the two options below.
 
-Or you can use the dockerfile from this repo.
+### Option 1: Docker (recommended)
 
-```
+Build the image and start the container:
+
+```bash
 docker build -t orpdet .
-```
-```
 docker run -it --gpus all --name orpdet --shm-size 10G orpdet:latest bash
 ```
 
-or if already initialized,
+If the container already exists:
 
-```
+```bash
 docker start -i orpdet
 docker exec -it orpdet bash
 ```
 
+### Option 2: Conda
+
+a. Create a conda virtual environment and activate it.
+
+```bash
+conda create -n orientedreppoints python=3.7 -y
+source activate orientedreppoints
+```
+
+b. Install PyTorch and torchvision following the [official instructions](https://pytorch.org/get-started/previous-versions/), e.g.,
+
+```bash
+conda install pytorch=1.4.0 torchvision cudatoolkit=10.0 -c pytorch
+```
+
+c. Install Oriented RepPoints.
+
+```bash
+pip install -r requirements.txt
+python setup.py develop  # or "pip install -v -e ."
+```
+
 ## Install DOTA_devkit
 
-```
+```bash
 sudo apt-get install swig
-```
-```
 cd DOTA_devkit
 swig -c++ -python polyiou.i
 python setup.py build_ext --inplace
