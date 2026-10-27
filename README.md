@@ -1,7 +1,18 @@
-# Oriented Object Detection in High Resolution Satellite Imagery 
-Object detection from aerial images is a complex task due to the difficulty in detecting small objects, the variability in their appearance, and their high density within a limited image space. To address these challenges, advanced techniques are required. Furthermore, objects in aerial images may appear with arbitrary rotations. Traditional detectors, which attempt to address the aforementioned issues, are unable to solve this orientation problem, resulting in suboptimal localization of such objects. Several proposals have been made to adapt bounding boxes to rotated objects, including the use of adaptive point sets tailored to each object's characteristics. [Oriented RepPoints](https://github.com/LiWentomng/OrientedRepPoints), is a model that uses adaptive point sets for object-oriented detection through satellite imagery. This repository is a modified version where the feature extractor is replaced by a PAFPN to improve its performance in detecting the features of different objects. Finally, a comparison is made between the base model, the modification, and other state-of-the-art models on the DOTA dataset.
+# Oriented Object Detection in High Resolution Satellite Imagery
 
-The paper can be seen [here](https://oa.upm.es/75859/).
+## My contribution (Master's Thesis, UPM)
+
+This fork contains the code of my Master's thesis in Artificial Intelligence at Universidad Politécnica de Madrid ([thesis](https://oa.upm.es/75859/)). On top of the original Oriented RepPoints implementation, I:
+
+- Replaced the FPN neck with a PAFPN (Path Aggregation FPN) to improve bottom-up feature propagation for small, densely packed objects.
+- Added a Dockerfile for a reproducible training and evaluation environment.
+- Benchmarked the original and modified models against other state-of-the-art detectors on DOTA (mAP on the test set, orientation error mAOE on val).
+
+**Takeaway:** PAFPN matched the baseline mAP (72.27 vs 72.21) with ~2.9M extra parameters and a higher orientation error (7.42° vs 6.68°), so the added cost does not pay off for this task.
+
+## Background
+
+Object detection from aerial images is a complex task due to the difficulty in detecting small objects, the variability in their appearance, and their high density within a limited image space. Furthermore, objects in aerial images may appear with arbitrary rotations, which traditional horizontal-box detectors cannot handle, resulting in suboptimal localization. [Oriented RepPoints](https://github.com/LiWentomng/OrientedRepPoints) addresses this with adaptive point sets tailored to each object, and is the base model for this work.
 
 # Modified architecture
 <img src="docs\overallnetwork_pafpn.png" width="800px">
@@ -95,9 +106,9 @@ orientedreppoints
 # Results and Models
 The results on DOTA test set are shown in the table below. More detailed results please see the paper.
 
-  Model | Backbone | Neck  | Params (M)| mAP (%)
- ----  | ----- | ------ |------| ------ | ------  
- OrientedReppoints | R-50 | FPN | 36.1 | 72.21
+ Model | Backbone | Neck | Params (M) | mAP (%)
+----  | ----- | ------  | ----- | -----
+ OrientedReppoints | R-50 | FPN | 36.1 | 72.21 
  OrientedReppoints | R-50 | PAFPN | 38.97 | 72.27
 
 Note: 
